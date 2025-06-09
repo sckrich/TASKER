@@ -1,0 +1,55 @@
+-- Create the database
+CREATE DATABASE TaskManagement;
+
+-- Table "User"
+CREATE TABLE "User" (
+    user_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    middle_name VARCHAR(50),
+    avatar VARCHAR(255),
+    birth_date DATE,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    user_groups VARCHAR(255),
+    position VARCHAR(50)
+);
+
+-- Table "Group"
+CREATE TABLE "Group" (
+    group_id SERIAL PRIMARY KEY,
+    group_name VARCHAR(100) NOT NULL,
+    group_password VARCHAR(255) NOT NULL,
+    user_id INT,
+    task_id INT,
+    FOREIGN KEY (user_id) REFERENCES "User"(user_id),
+    FOREIGN KEY (task_id) REFERENCES "Task"(task_id)  -- Ensure "Task" is quoted
+);
+
+-- Table "Task"
+CREATE TABLE "Task" (
+    task_id SERIAL PRIMARY KEY,
+    task_name VARCHAR(100) NOT NULL,
+    task_description TEXT,
+    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    task_status VARCHAR(50),
+    assigned_user_id INT,
+    FOREIGN KEY (assigned_user_id) REFERENCES "User"(user_id)
+);
+
+-- Table "Comment"
+CREATE TABLE "Comment" (
+    task_id INT,
+    comment_content TEXT NOT NULL,
+    user_id INT,
+    FOREIGN KEY (task_id) REFERENCES "Task"(task_id),  -- Ensure "Task" is quoted
+    FOREIGN KEY (user_id) REFERENCES "User"(user_id)
+);
+
+-- Table "UserNotifications"
+CREATE TABLE "UserNotifications" (
+    user_id INT,
+    invitation_description TEXT NOT NULL,
+    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES "User"(user_id)
+);

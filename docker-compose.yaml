@@ -1,0 +1,43 @@
+
+services:
+  frontend:
+    build:
+      context: ./app/frontend/front
+      dockerfile: Dockerfile
+    ports: 
+      - "8070:8021"
+    volumes:
+      - .:/app
+    environment:
+      - NODE_ENV=development
+
+
+  backend:
+      build: 
+        context: ./app/backend/back
+        dockerfile: Dockerfile
+      ports:
+        - "9091:8090"  
+      volumes:
+        - .:/app  
+      environment:
+        - PYTHONUNBUFFERED=1  
+
+  db:
+        image: postgres:17
+        restart: always
+        environment:
+          POSTGRES_DB: TaskerDataBase
+          POSTGRES_USER: postgres     
+          POSTGRES_PASSWORD: snopatd  
+        ports:
+          - "5432:5432"  
+  pgadmin:
+      image: dpage/pgadmin4
+      environment:
+        PGADMIN_DEFAULT_EMAIL: admin@example.com
+        PGADMIN_DEFAULT_PASSWORD: root           
+      ports:
+        - "8080:80"  
+      depends_on:
+        - db  
