@@ -4,7 +4,12 @@ from rest_framework import viewsets
 from .models import User
 from rest_framework import status
 from django.contrib.auth.hashers import make_password
-# Create your views here.
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import CustomTokenObtainPairSerializer
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+
 class UserRegistration(viewsets.ViewSet):
     def register(self, request):
         username = request.data.get('username')

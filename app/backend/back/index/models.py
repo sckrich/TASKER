@@ -55,7 +55,37 @@ class User(models.Model):
     password = models.CharField(max_length=255)
     user_groups = models.CharField(max_length=255, blank=True, null=True)
     position = models.CharField(max_length=50, blank=True, null=True)
-
+ 
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+  
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['user_email']
+    @property
+    def is_authenticated(self):
+        return True
+    
+    @property
+    def is_anonymous(self):
+        return False
+    
+    @property
+    def is_active(self):
+        return True  # или ваша собственная логика
+    
+    @property
+    def is_staff(self):
+        return False  # или ваша собственная логика
+    
+    @property
+    def is_superuser(self):
+        return False  # или ваша собственная логика
+    
+    def has_perm(self, perm, obj=None):
+        return False  # или ваша собственная логика
+    
+    def has_module_perms(self, app_label):
+        return False  # или ваша собственная логика
     class Meta:
         managed = False
         db_table = 'User'

@@ -29,3 +29,5 @@ tzlocal==5.3.1
 uritools==5.0.0 
 urllib3==2.4.0 
 xhtml2pdf==0.2.17
+djangorestframework-simplejwt==5.5.0
+pyjwt==1.7.1
