@@ -98,7 +98,7 @@ DATABASES = {
         'NAME': 'TaskerDataBase', 
         'USER': 'postgres', 
         'PASSWORD': 'snopatd', 
-        'HOST': 'localhost', 
+        'HOST': 'db', 
         'PORT': '5432',
         'OPTIONS': {
             'client_encoding': 'UTF8', 
