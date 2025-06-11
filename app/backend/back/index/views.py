@@ -1,15 +1,21 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import viewsets
-from .models import User
+from .models import User, Group
 from rest_framework import status
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import CustomTokenObtainPairSerializer
+from .serializers import CustomTokenObtainPairSerializer, GroupSerializer
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
-
+class UserGroups(viewsets.ViewSet):
+    def getGroups(self, request):
+        user_id = request.data.get("user_id")
+        user = User.objects.get(user_id = user_id)
+        groups = Group.objects.filter(user = user_id)
+        groups_serializer = GroupSerializer(groups, many = True)
+        return Response({"groups": groups_serializer.data}, status = status.HTTP_200_OK)
 class UserRegistration(viewsets.ViewSet):
     def register(self, request):
         username = request.data.get('username')
@@ -33,4 +39,17 @@ class UserRegistration(viewsets.ViewSet):
         user.save()
         return Response({"message": "Регистрация успешна!"}, status=status.HTTP_201_CREATED)
 class UserLogin(viewsets.ViewSet):
-    ...
+    def login(self, request):
+        username = request.data.get('username')
+        password = request.data.get('user_password')
+        try:
+            if User.objects.filter(username = username).exists():
+                user = User.objects.get(username=username)
+                if(check_password(password, user.password)):
+                    return Response({
+                       "status":"success",
+                    })
+                else:
+                    return Response({"error": "Неверный пароль"}, status=status.HTTP_401_UNAUTHORIZED)
+        except User.DoesNotExist:
+            return Response({"error": "Пользователь не найден"}, status=status.HTTP_404_NOT_FOUND)
