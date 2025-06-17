@@ -71,21 +71,21 @@ class User(models.Model):
     
     @property
     def is_active(self):
-        return True  # или ваша собственная логика
+        return True  
     
     @property
     def is_staff(self):
-        return False  # или ваша собственная логика
+        return False 
     
     @property
     def is_superuser(self):
-        return False  # или ваша собственная логика
+        return False 
     
     def has_perm(self, perm, obj=None):
-        return False  # или ваша собственная логика
+        return False 
     
     def has_module_perms(self, app_label):
-        return False  # или ваша собственная логика
+        return False 
     class Meta:
         managed = False
         db_table = 'User'
