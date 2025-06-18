@@ -1,38 +1,69 @@
 <script setup>
+import axios from 'axios';
+import { ref } from 'vue';
+
+import { errorMessages } from 'vue/compiler-sfc';
+const email = ref('')
+const password = ref('')
+const username = ref('')
+const fname = ref('')
+const lname = ref('')
+const mname = ref('')
+const birth_date = ref('')
+
+const submitlogin = async () =>{
+    try{
+    const response = await axios.post('http://localhost:9091/api/SignUp/', {
+        "username": username.value,
+        "user_password": password.value,
+        "first_name": fname.value,
+        "last_name": lname.value,
+        "middle_name": mname.value,
+        "user_email": email.value,
+        "user_birthdate": birth_date.value 
+    })
+    }
+    catch(error){
+        console.error("Error : - ", error)
+    }
+}
+function show(){
+    console.log(username.value, password.value, fname.value, lname.value, mname.value, email.value, birth_date.value )
+}
 </script>
 <template>
 <div class="form">
     <div class="form-wrapper">
-    <form v-on:submit="submitlogin">
+    <form @submit.prevent="submitlogin">
         <div class="email">
             <h3>Логин:</h3>
-            <input type="text" placeholder="Логин">
+            <input v-model="username" type="text" placeholder="Логин">
         </div>
         <div class="email">
             <h3>Ваше имя:</h3>
-            <input type="text" placeholder="Имя">
+            <input v-model="fname" type="text" placeholder="Имя">
         </div>
         <div class="email">
             <h3>Ваша фамилия:</h3> 
-            <input type="text" placeholder="Фамилия">
+            <input v-model="lname" type="text" placeholder="Фамилия">
         </div>
         <div class="email">
             <h3>Ваше отчество (при наличии):</h3>
-            <input type="text" placeholder="Отчество">
+            <input v-model="mname" type="text" placeholder="Отчество">
         </div>
         <div class="email">
-        <h3>Пароль:</h3>
-            <input type="date" placeholder="Дата рождения">
+        <h3>Дата рождения:</h3>
+            <input v-model="birth_date" type="date" placeholder="Дата рождения">
         </div>
         <div class="email">
             <h3>Ваш E-mail</h3>
-            <input type="text" placeholder="Отчество">
+            <input v-model="email" type="text" placeholder="Почта">
         </div>
         <div class="pass">
         <h3>Пароль:</h3>
-            <input type="password" placeholder="Пароль">
+            <input v-model="password" type="password" placeholder="Пароль">
         </div>
-        
+        <button @click="show()">Show</button>
         <button type="submit">Войти</button>
         <div class="reg">
             <p class = "reg-text">Уже есть аккаунт? - </p>

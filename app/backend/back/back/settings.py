@@ -42,18 +42,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'index',
+    'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
 }
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8020",
-    "http://127.0.0.1:8020",
+    "http://localhost:8070",
+    "http://127.0.0.1:8070",
 ]
 CORS_ALLOW_METHODS = [
     "GET",
@@ -69,6 +73,7 @@ CORS_ALLOW_HEADERS = [
     "x-requested-with",
 ]
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
