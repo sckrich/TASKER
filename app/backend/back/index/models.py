@@ -34,7 +34,7 @@ class Task(models.Model):
     task_id = models.AutoField(primary_key=True)
     task_name = models.CharField(max_length=100)
     task_description = models.TextField(blank=True, null=True)
-    creation_date = models.DateTimeField(blank=True, null=True)
+    creation_date = models.DateField(blank=True, null=True)
     task_status = models.CharField(max_length=50, blank=True, null=True)
     assigned_user = models.ForeignKey('User', models.DO_NOTHING, blank=True, null=True)
 

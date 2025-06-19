@@ -1,7 +1,15 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers, generics
-from .models import User, Group
+from .models import User, Group, Task
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = "__all__"
 
+class UserSerializer(serializers.Serializer):
+    class Meta:
+        model: User
+        fields = "__all__"
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
@@ -10,8 +18,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-        
-        # Добавляем кастомные поля в токен
+     
         token['username'] = user.username
         token['email'] = user.user_email
         token['user_id'] = user.user_id
@@ -19,10 +26,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
     def validate(self, attrs):
-        # Стандартная валидация
         data = super().validate(attrs)
         
-        # Добавляем дополнительные данные в ответ
         user = self.user
         data.update({
             'user_id': user.user_id,
