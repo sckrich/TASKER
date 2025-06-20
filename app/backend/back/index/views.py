@@ -10,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.shortcuts import get_object_or_404
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
@@ -18,12 +19,20 @@ class UserTasksList(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     def getTasks(self, request):
-        
         user_id = request.data.get("user_id")
         tasks = Task.objects.filter(assigned_user = user_id)
         tasks_serializer = TaskSerializer(tasks, many = True)
         return Response({"tasks": tasks_serializer.data}, status = status.HTTP_200_OK)
     
+class UserGroupTasksList(viewsets.ViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    def getTaskByGroup(self, request):
+        group_id = request.data.get("group_id")
+        tasks = Task.objects.filter(task_group = group_id)
+        tasks_serializer = TaskSerializer(tasks, many = True)
+        return Response({"tasks":tasks_serializer.data}, status=status.HTTP_200_OK)
+
 class UserGroups(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
